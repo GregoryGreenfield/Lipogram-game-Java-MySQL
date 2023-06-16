@@ -1,15 +1,12 @@
 package greggles;
 
 import java.io.Console;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Scanner;
 
 /**
- * This game creates lipograms and tests the user for them.
+ * This game creates lipograms and tests the user for them. Created by
+ * gregorysmgreenfield@gmail.com
  */
 public class App {
     /**
@@ -20,27 +17,25 @@ public class App {
      * @return That the program has finished
      */
     public static void main(String[] args) {
-        PrintWriter printWriter = new PrintWriter(System.out, true);
-        char aa = '\u0905';
-        printWriter.println("aa = " + aa);
-        System.out.println(
-                "\\u0C24\\u0C46\\u0C32\\u0C41\\u0C17\\u0C41 \\u0C05\\u0C28\\u0C47\\u0C26\\u0C3F \\u0C26\\u0C4D\\u0C30\\u0C3E\\u0C35\\u0C3F\\u0C21 \\u0C2D\\u0C3E\\u0C37\\u0C32 \\u0C15\\u0C41\\u0C1F\\u0C41\\u0C02\\u0C2C\\u0C3E\\u0C28\\u0C3F\\u0C15\\u0C3F \\u0C1A\\u0C46\\u0C02\\u0C26\\u0C3F\\u0C28 \\u0C2D\\u0C3E\\u0C37.");
         // Print instructions
-        String path = System.getProperty("user.dir") + "/src/main/java/greggles/readme.txt";
-        try {
-            Scanner input = new Scanner(new File(path));
-            while (input.hasNextLine()) {
-                System.out.println(input.nextLine());
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        /*
+         * String path = System.getProperty("user.dir") +
+         * "/src/main/java/greggles/readme.txt";
+         * try {
+         * Scanner input = new Scanner(new File(path));
+         * while (input.hasNextLine()) {
+         * System.out.println(input.nextLine());
+         * }
+         * } catch (FileNotFoundException e) {
+         * e.printStackTrace();
+         * }
+         */
         System.out.println("\n----------------------------------------------------------------\n");
         System.out.println(
                 "Type the lipogram character and press return.\nIf you don't know the lipogram yet, press return for another word");
 
-        String[] LanguageAndPath = DynamicCoded.GetLanguageAndPath();
-        DynamicMain(LanguageAndPath[0], LanguageAndPath[1]);
+        String[] LanguageAndTable = DynamicCoded.GetLanguageAndTable();
+        DynamicMain(LanguageAndTable[0], LanguageAndTable[1]);
         // HardCoded.HardMain();
     }
 
@@ -52,19 +47,21 @@ public class App {
      * 5: Print results, offer to play again.
      * 
      * @param language The language of the words the user wants to play in.
-     * @param path     The path to the source of words the user wants to work in.
+     * @param table    The path to the source of words the user wants to work in.
      */
-    public static void DynamicMain(String language, String path) {
-        Console read = System.console();
-
+    public static void DynamicMain(String language, String table) {
         // Declarations
-        String Lipogrammed = "";
+        Console read = System.console();
         boolean GuessCorrect = false;
+
+        // Connect to LipogramGame db.
+        MySQLHandler wordSelector = new MySQLHandler();
+        wordSelector.connect();
 
         // Get lipogram
         String Lipo = DynamicCoded.LipogramsDynamicCoded(language);
 
-        // Cheat: write lipogram
+        // Cheat for debugging purposes: write lipogram
         System.out.println("CHEAT Lipogram is: " + Lipo);
 
         // start stopwatch
@@ -72,7 +69,7 @@ public class App {
 
         // Print lipogrammed words and query user.
         while (!GuessCorrect) {
-            Lipogrammed = DynamicCoded.LipogrammedDynamicString(path, Lipo);
+            String Lipogrammed = DynamicCoded.LipogrammedDynamicString(wordSelector.getWord(Lipo, table), Lipo);
             System.out.println("- " + Lipogrammed);
             GlobalVariables.CharCounter = GlobalVariables.CharCounter + Lipogrammed.length();
             GlobalVariables.WordCounter++;
@@ -86,22 +83,29 @@ public class App {
         Duration timeElapsed = Duration.between(startTime, endTime);
         System.out.println("Lipogram is: " + Lipo + "\nTime taken: " + formatDuration(timeElapsed)
                 + "\nTotal number of guesses: " + GlobalVariables.GuessCounter + "\nTotal number of words: "
-                + GlobalVariables.WordCounter + "\nTotal number of characterss: " + GlobalVariables.CharCounter
+                + GlobalVariables.WordCounter + "\nTotal number of characters: " + GlobalVariables.CharCounter
                 + "\nThank you for playing!\nWould you like to play again?\nYes: 'Y'\nNo:  'N'\nChange of language and/or words: 'S'");
         String choice = read.readLine().toLowerCase();
-
+        // Reset global score variables.
+        GlobalVariables.CharCounter = 0;
+        GlobalVariables.GuessCounter = 0;
+        GlobalVariables.WordCounter = 0;
         switch (choice) {
             case "y":
-                DynamicMain(language, path);
+                DynamicMain(language, table);
                 break;
             case "s":
-                String[] LanguageAndPath = DynamicCoded.GetLanguageAndPath();
+                MySQLHandler.ReturnToUnchosen(table);
+                String[] LanguageAndPath = DynamicCoded.GetLanguageAndTable();
                 DynamicMain(LanguageAndPath[0], LanguageAndPath[1]);
                 break;
             default:
+                MySQLHandler.ReturnToUnchosen(table);
                 // program ends
                 break;
         }
+        // Disconnect from LipogramGame
+        wordSelector.disconnect();
     }
 
     /**
@@ -119,5 +123,4 @@ public class App {
         return String.format("%d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
     }
 
-    
 }

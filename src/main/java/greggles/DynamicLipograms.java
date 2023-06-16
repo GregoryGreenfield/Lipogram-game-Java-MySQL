@@ -53,7 +53,7 @@ class DynamicCoded {
      * @return A string array of two elements: [0] is language choice, [1] is the
      *         path to the resource choice.
      */
-    public static String[] GetLanguageAndPath() {
+    public static String[] GetLanguageAndTable() {
         System.out.println("Choose your language:\n1: English\n2: Deutsch\n3: Telugu");
         Console read = System.console();
         String language = read.readLine();
@@ -65,13 +65,13 @@ class DynamicCoded {
                 String choice = read.readLine();
                 switch (choice) {
                     case "1":
-                        source = "UlyssesChp1.txt";
+                        source = "UlyssesChp1";
                         break;
                     case "2":
-                        source = "NYTarticle.txt";
+                        source = "NYTarticle";
                         break;
                     case "3":
-                        source = "Dictionary.txt";
+                        source = "Dictionary";
                         break;
                     default:
                         break;
@@ -83,13 +83,13 @@ class DynamicCoded {
                 choice = read.readLine();
                 switch (choice) {
                     case "1":
-                        source = "DieWeltVonGestern.txt";
+                        source = "DieWeltVonGestern";
                         break;
                     case "2":
-                        source = "FranzJosefLand.txt";
+                        source = "FranzJosefLand";
                         break;
                     case "3":
-                        source = "DeutschWörterbuch.txt";
+                        source = "DeutschWörterbuch";
                         break;
                     default:
                         break;
@@ -100,13 +100,13 @@ class DynamicCoded {
                 choice = read.readLine();
                 switch (choice) {
                     case "1":
-                        source = "TeluguDictionary.txt";
+                        source = "TeluguDictionary";
                         break;
                     case "2":
-                        source = "Seethakalyanam.txt";
+                        source = "Seethakalyanam";
                         break;
                     case "3":
-                        source = "MigratoryBirdsTelugu.txt";
+                        source = "MigratoryBirdsTelugu";
                         break;
                     default:
                         break;
@@ -115,9 +115,8 @@ class DynamicCoded {
             default:
                 break;
         }
-        String path = System.getProperty("user.dir") + "/src/main/java/greggles/WordsRepo/" + source;
-        String[] LanguageAndPath = new String[] { language, path };
-        return (LanguageAndPath);
+        String[] LanguageAndTable = new String[] { language, source };
+        return (LanguageAndTable);
     }
 
     /**
@@ -142,27 +141,17 @@ class DynamicCoded {
     }
 
     /**
-     * Generates a word from the user-requested source, and removes all instances of
-     * the lipogram character.
+     * Removes all instances of the lipogram character from the received word.
      * 
-     * @param path The path to the user requested resource.
-     * @param Lipo The lipogram
-     * @return A lipogrammed word.
+     * @param word The word containing the lipogram (e.g. happy)
+     * @param Lipo The lipogram (e.g. a)
+     * @return A lipogrammed word (hppy)
      */
-    public static String LipogrammedDynamicString(String path, String Lipo) {
-        boolean match = false;
-        String OrigString = "";
-        while (!match) {
-            OrigString = GetOriginalWord(path);
-            if (OrigString.contains(Lipo)) {
-                match = true;
-            }
-        }
-        String Lower = OrigString.toLowerCase();
+    public static String LipogrammedDynamicString(String word, String Lipo) {
         for (int i = 0; i < Lipo.length(); i++) {
-            Lower = Lower.replace(Lipo.toLowerCase(), "");
+            word = word.replace(Lipo.toLowerCase(), "");
         }
-        return (Lower);
+        return (word);
     }
 
     /**
@@ -174,7 +163,8 @@ class DynamicCoded {
      * @return Whether the user's guess is correct.
      */
     public static boolean LipoGuess(String Lipo, String LipoGuess) {
-        if (LipoGuess != "") {
+
+        if (!LipoGuess.isEmpty()) {
             GlobalVariables.GuessCounter++;
         }
         if (Lipo.equals(LipoGuess.toLowerCase())) {
@@ -190,6 +180,6 @@ class DynamicCoded {
  */
 class GlobalVariables {
     public static int GuessCounter = 0;
-    public static int WordCounter = 1;
+    public static int WordCounter = 0;
     public static int CharCounter = 0;
 }
