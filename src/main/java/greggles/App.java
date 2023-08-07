@@ -1,8 +1,11 @@
 package greggles;
 
 import java.io.Console;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Scanner;
 
 /**
  * This game creates lipograms and tests the user for them. Created by
@@ -18,18 +21,17 @@ public class App {
      */
     public static void main(String[] args) {
         // Print instructions
-        /*
-         * String path = System.getProperty("user.dir") +
-         * "/src/main/java/greggles/readme.txt";
-         * try {
-         * Scanner input = new Scanner(new File(path));
-         * while (input.hasNextLine()) {
-         * System.out.println(input.nextLine());
-         * }
-         * } catch (FileNotFoundException e) {
-         * e.printStackTrace();
-         * }
-         */
+        String path = System.getProperty("user.dir") +
+                "/demo/src/main/java/greggles/readme.txt";
+        try {
+            Scanner input = new Scanner(new File(path));
+            while (input.hasNextLine()) {
+                System.out.println(input.nextLine());
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
         System.out.println("\n----------------------------------------------------------------\n");
         System.out.println(
                 "Type the lipogram character and press return.\nIf you don't know the lipogram yet, press return for another word");
@@ -62,7 +64,7 @@ public class App {
         String Lipo = DynamicCoded.LipogramsDynamicCoded(language);
 
         // Cheat for debugging purposes: write lipogram
-        System.out.println("CHEAT Lipogram is: " + Lipo);
+        // System.out.println("CHEAT Lipogram is: " + Lipo);
 
         // start stopwatch
         Instant startTime = Instant.now();
@@ -119,7 +121,6 @@ public class App {
         long minutes = duration.minusHours(hours).toMinutes();
         long seconds = duration.minusHours(hours).minusMinutes(minutes).getSeconds();
         long milliseconds = duration.minusHours(hours).minusMinutes(minutes).minusSeconds(seconds).toMillis();
-
         return String.format("%d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds);
     }
 

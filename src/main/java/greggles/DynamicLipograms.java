@@ -54,7 +54,7 @@ class DynamicCoded {
      *         path to the resource choice.
      */
     public static String[] GetLanguageAndTable() {
-        System.out.println("Choose your language:\n1: English\n2: Deutsch\n3: Telugu");
+        System.out.println("Choose your language:\n1: English\n2: Deutsch");
         Console read = System.console();
         String language = read.readLine();
         String source = "";
@@ -95,6 +95,7 @@ class DynamicCoded {
                         break;
                 }
                 break;
+                /*
             case "3":
                 System.out.println("మీ పదాలను ఎంచుకోండి:\n1: తెలుగు నిఘంటువు\n2: సీతాకల్యాణం\n3: వలస పక్షుల వ్యాసం");
                 choice = read.readLine();
@@ -112,6 +113,7 @@ class DynamicCoded {
                         break;
                 }
                 break;
+                 */
             default:
                 break;
         }
