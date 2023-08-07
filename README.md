@@ -16,5 +16,5 @@ Results:
 - The correct Lipogram(s). 
 - Whether you were correct.
 
-I implemented this game in Java and MySQL, where the a MySQL database stored the list of words to try. I also implemented this game using C#. Please visit here: [https://github.com/GregoryGreenfield/Lipogram-game-Java-MySQL
-](https://github.com/GregoryGreenfield/Lipogram-game-CSharp)https://github.com/GregoryGreenfield/Lipogram-game-CSharp
+I implemented this game in Java and MySQL, where the a MySQL database stored the list of words to try. I also implemented this game using C#. Please visit here: 
+(https://github.com/GregoryGreenfield/Lipogram-game-CSharp)https://github.com/GregoryGreenfield/Lipogram-game-CSharp
